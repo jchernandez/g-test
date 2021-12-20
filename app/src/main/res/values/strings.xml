@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">GBMTest</string>
+    <string name="message_biometric">Usa tu Huella para entrar.</string>
+    <string name="btn_biometric_title">Verificar Huella Digital</string>
+    <string name="price">Precio</string>
+    <string name="rises">Alzas</string>
+    <string name="falls">Bajas</string>
+    <string name="volume">Volumen</string>
+</resources>
