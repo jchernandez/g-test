@@ -6,4 +6,8 @@
     <string name="rises">Alzas</string>
     <string name="falls">Bajas</string>
     <string name="volume">Volumen</string>
+    <string name="error_title">Ocurrió un error</string>
+    <string name="error_top_message">Hubo un error al consultar el Top Ten, por favor intentalo de nuevo más tarde.</string>
+    <string name="error_ipc_message">Hubo un error al consultar los indicadores, por favor intentalo de nuevo más tarde.</string>
+    <string name="retry">Reintentar</string>
 </resources>

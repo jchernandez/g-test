@@ -9,7 +9,7 @@ interface  ResourceObserver<T>: Observer<Resource<T>> {
     override fun onChanged(t: Resource<T>) {
         if (t.status == Status.SUCCESS) {
             onSuccess()
-        } else {
+        } else if (t.status == Status.ERROR) {
             onError(t.error!!)
         }
     }

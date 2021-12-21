@@ -5,6 +5,8 @@
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_fingerprint.xml" value="0.228125" />
         <entry key="app/src/main/res/layout/activity_ipc.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/layout/view_ipc.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/layout/view_top_ten.xml" value="0.21145833333333333" />
       </map>
     </option>
   </component>

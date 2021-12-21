@@ -7,7 +7,9 @@ import android.content.IntentFilter
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.system.Os.accept
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +30,8 @@ import com.rojoxpress.gbmtest.ui.adapter.TopTenAdapter
 import com.rojoxpress.gbmtest.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.rojoxpress.gbmtest.databinding.ViewIpcBinding
+import com.rojoxpress.gbmtest.databinding.ViewTopTenBinding
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.timerTask
 
@@ -37,6 +41,8 @@ class IPCActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<IPCViewModel>()
     private lateinit var binding: ActivityIpcBinding
+    private lateinit var ipcView: ViewIpcBinding
+    private lateinit var topTenView: ViewTopTenBinding
     private val timer = Timer()
 
     private val ipcObserver = object : ResourceObserver<List<IPC>> {
@@ -46,6 +52,7 @@ class IPCActivity : AppCompatActivity() {
         }
 
         override fun onError(error: Error) {
+            onIPCError()
         }
 
     }
@@ -83,10 +90,12 @@ class IPCActivity : AppCompatActivity() {
     private fun setBinding() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_ipc)
         binding.lifecycleOwner = this
+        ipcView = binding.viewIpc
+        topTenView = binding.viewTopTen
         binding.viewModel = viewModel
-        binding.rvFalls.layoutManager = LinearLayoutManager(this)
-        binding.rvRises.layoutManager = LinearLayoutManager(this)
-        binding.rvVolume.layoutManager = LinearLayoutManager(this)
+        topTenView.rvFalls.layoutManager = LinearLayoutManager(this)
+        topTenView.rvRises.layoutManager = LinearLayoutManager(this)
+        topTenView.rvVolume.layoutManager = LinearLayoutManager(this)
     }
 
 
@@ -95,9 +104,9 @@ class IPCActivity : AppCompatActivity() {
         val desc = Description()
         desc.text = "IPC"
         desc.textColor = blackColor
-        binding.lineChart.description = desc
+        ipcView.lineChart.description = desc
 
-        val xAxis = binding.lineChart.xAxis
+        val xAxis = ipcView.lineChart.xAxis
         xAxis.textColor = blackColor
         xAxis.valueFormatter = object : ValueFormatter() {
             private val mFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
@@ -111,16 +120,16 @@ class IPCActivity : AppCompatActivity() {
                 return Utils.amountFormat(value)
             }
         }
-        binding.lineChart.axisRight.apply {
+        ipcView.lineChart.axisRight.apply {
             textColor = blackColor
             valueFormatter = xFormatter
         }
-        binding.lineChart.axisLeft.apply {
+        ipcView.lineChart.axisLeft.apply {
             valueFormatter = xFormatter
             textColor = blackColor
         }
 
-        binding.lineChart.legend.textColor = blackColor
+        ipcView.lineChart.legend.textColor = blackColor
     }
 
     private fun showGraph() {
@@ -140,21 +149,31 @@ class IPCActivity : AppCompatActivity() {
         dataSets.add(highLineDataSet)
 
         val lineData = LineData(dataSets)
-        binding.lineChart.data = lineData
-        binding.lineChart.invalidate()
+        ipcView.lineChart.data = lineData
+        ipcView.lineChart.invalidate()
     }
 
 
     private fun populateData() {
-        binding.rvVolume.adapter = TopTenAdapter(this, viewModel.volumeList!!)
-        binding.rvRises.adapter = TopTenAdapter(this, viewModel.riseList!!)
-        binding.rvFalls.adapter = TopTenAdapter(this, viewModel.fallList!!)
+        topTenView.rvVolume.adapter = TopTenAdapter(this, viewModel.volumeList!!)
+        topTenView.rvRises.adapter = TopTenAdapter(this, viewModel.riseList!!)
+        topTenView.rvFalls.adapter = TopTenAdapter(this, viewModel.fallList!!)
     }
 
     private fun scheduleRefresh() {
         timer.schedule(timerTask {
             viewModel.getTops()
         }, TimeUnit.SECONDS.toMillis(20))
+    }
+
+    fun onIPCError() {
+        AlertDialog.Builder(this).apply {
+            setTitle(R.string.error_title)
+            setMessage(R.string.error_ipc_message)
+            setPositiveButton(R.string.retry) { _, _ ->
+                viewModel.getTops()
+            }
+        }.show()
     }
 
 }

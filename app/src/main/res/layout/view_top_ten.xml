@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.rojoxpress.gbmtest.model.Status"/>
+        <variable
+            name="viewModel"
+            type="com.rojoxpress.gbmtest.ui.IPCViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:orientation="vertical"
+            android:visibility="@{viewModel.top.status == Status.ERROR ? View.VISIBLE:View.GONE, default=gone}">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/error_title"
+                style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/error_top_message"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:onClick="@{() -> viewModel.getTops()}"
+                android:text="@string/retry"/>
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_lists"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{(viewModel.top.status == Status.LOADING) ? View.VISIBLE:View.GONE, default=gone}" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:visibility="@{viewModel.top.status == Status.SUCCESS ? View.VISIBLE:View.GONE, default=gone}">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:textColor="@color/white"
+                android:text="@string/rises"
+                android:padding="5dp"
+                android:visibility="@{viewModel.top != null ? View.VISIBLE:View.GONE, default=gone}" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_rises"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:textColor="@color/white"
+                android:text="@string/falls"
+                android:padding="5dp"
+                android:visibility="@{viewModel.top != null ? View.VISIBLE:View.GONE, default=gone}" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_falls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:textColor="@color/white"
+                android:text="@string/volume"
+                android:padding="5dp"
+                android:visibility="@{viewModel.top != null ? View.VISIBLE:View.GONE, default=gone}" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_volume"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </FrameLayout>
+</layout>

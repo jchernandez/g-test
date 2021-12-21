@@ -45,6 +45,7 @@ class IPCViewModel @Inject constructor(private val dataRepository: DataRepositor
     }
 
     fun getTops() {
+        _top.value = Resource()
         viewModelScope.launch {
             val topResource = dataRepository.getTop()
             if (topResource.status == Status.SUCCESS) {
