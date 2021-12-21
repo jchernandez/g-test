@@ -27,6 +27,7 @@ class IPCViewModel @Inject constructor(private val dataRepository: DataRepositor
     var volumeList: ArrayList<Top>? = null
 
     fun getIPC() {
+        _ipc.value = Resource()
         viewModelScope.launch {
             _ipc.value = dataRepository.getIPC()
         }

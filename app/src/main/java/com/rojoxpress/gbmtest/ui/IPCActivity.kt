@@ -171,7 +171,7 @@ class IPCActivity : AppCompatActivity() {
             setTitle(R.string.error_title)
             setMessage(R.string.error_ipc_message)
             setPositiveButton(R.string.retry) { _, _ ->
-                viewModel.getTops()
+                viewModel.getIPC()
             }
         }.show()
     }

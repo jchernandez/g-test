@@ -3,6 +3,7 @@
 
     <data>
         <import type="android.view.View"/>
+        <import type="com.rojoxpress.gbmtest.model.Status"/>
         <variable
             name="viewModel"
             type="com.rojoxpress.gbmtest.ui.IPCViewModel" />
@@ -17,14 +18,14 @@
             android:id="@+id/line_chart"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:visibility="@{viewModel.ipc != null ? View.VISIBLE:View.INVISIBLE, default=gone}"/>
+            android:visibility="@{viewModel.ipc.status == Status.SUCCESS ? View.VISIBLE:View.INVISIBLE, default=gone}"/>
 
         <ProgressBar
             android:id="@+id/pb_chart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="@{viewModel.ipc == null ? View.VISIBLE:View.GONE}"/>
+            android:visibility="@{viewModel.ipc.status == Status.LOADING ? View.VISIBLE:View.GONE}"/>
 
     </FrameLayout>
 </layout>
